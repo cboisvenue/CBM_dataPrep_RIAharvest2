@@ -1,20 +1,20 @@
-sw3Build <- function(masterRaster, tsaDirs, years){
+sw3Build <- function(masterRaster, tsaDirs, years, pathsTifs){
   # this is the table that will get filled with all the firest
   fireDistsDT <- data.table(pixelIndex = integer(), year = integer(), events = integer())
   cutDistsDT <- data.table(pixelIndex = integer(), year = integer(), events = integer())
 
   for(i in 1:length(years)){
     # the files have the same names and are in the same order in the 5 tsa folders
-    distTifs <- grep(years[i], list.files(list.dirs('inputs')[tsaDirs[1]])[-c(1:9)])
+    distTifs <- grep(years[i], list.files(list.dirs(pathsTifs)[tsaDirs[1]])[-c(1:9)])
     # fire = distTifs[1]
     # cut = distTifs[2]
     fireList <- list()
     cutList <- list()
     for(j in 1:length(tsaDirs)){
-      fireList[[j]] <- raster::raster(file.path(list.dirs('inputs')[tsaDirs[j]],
-                                                list.files(list.dirs('inputs')[tsaDirs[j]])[-c(1:9)][distTifs[1]]))
-      cutList[[j]] <- raster::raster(file.path(list.dirs('inputs')[tsaDirs[j]],
-                                               list.files(list.dirs('inputs')[tsaDirs[j]])[-c(1:9)][distTifs[2]]))
+      fireList[[j]] <- raster::raster(file.path(list.dirs(pathsTifs)[tsaDirs[j]],
+                                                list.files(list.dirs(pathsTifs)[tsaDirs[j]])[-c(1:9)][distTifs[1]]))
+      cutList[[j]] <- raster::raster(file.path(list.dirs(pathsTifs)[tsaDirs[j]],
+                                               list.files(list.dirs(pathsTifs)[tsaDirs[j]])[-c(1:9)][distTifs[2]]))
     }
 
     # put the 5 rasters together

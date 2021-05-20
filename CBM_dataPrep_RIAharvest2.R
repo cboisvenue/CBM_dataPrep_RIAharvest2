@@ -1,17 +1,17 @@
 defineModule(sim, list(
-  name = "CBM_dataPrep_RIAharvest1",
+  name = "CBM_dataPrep_RIAharvest2",
   description = "A data preparation module to format and prepare user-provided input to the SpaDES forest-carbon modelling familly.",
   keywords = NA,
   authors = c(
     person("Celine", "Boisvenue", email = "Celine.Boisvenue@canada.ca", role = c("aut", "cre"))
   ),
   childModules = character(0),
-  version = list(SpaDES.core = "1.0.2", CBM_dataPrep_RIAharvest1 = "0.0.1"),
+  version = list(SpaDES.core = "1.0.2", CBM_dataPrep_RIAharvest2 = "0.0.1"),
   spatialExtent = raster::extent(rep(NA_real_, 4)),
   timeframe = as.POSIXlt(c(NA, NA)),
   timeunit = "year",
   citation = list("citation.bib"),
-  documentation = list("README.txt", "CBM_dataPrep_RIAharvest1.Rmd"),
+  documentation = list("README.txt", "CBM_dataPrep_RIAharvest2.Rmd"),
   reqdPkgs = list(
     "data.table", "fasterize", "magrittr", "raster", "RSQLite", "sf",
     "PredictiveEcology/CBMutils (>= 0.0.6)",
@@ -172,7 +172,7 @@ defineModule(sim, list(
   )
 ))
 
-doEvent.CBM_dataPrep_RIAharvest1 <- function(sim, eventTime, eventType, debug = FALSE) {
+doEvent.CBM_dataPrep_RIAharvest2 <- function(sim, eventTime, eventType, debug = FALSE) {
   switch(
     eventType,
     init = {
@@ -183,7 +183,7 @@ doEvent.CBM_dataPrep_RIAharvest1 <- function(sim, eventTime, eventType, debug = 
       sim <- Init(sim)
 
       # schedule future event(s)
-      sim <- scheduleEvent(sim, P(sim)$.saveInitialTime, "CBM_dataPrep_RIAharvest1", "save")
+      sim <- scheduleEvent(sim, P(sim)$.saveInitialTime, "CBM_dataPrep_RIAharvest2", "save")
     },
     save = {
       # ! ----- EDIT BELOW ----- ! #
@@ -195,7 +195,7 @@ doEvent.CBM_dataPrep_RIAharvest1 <- function(sim, eventTime, eventType, debug = 
       # schedule future event(s)
 
       # e.g.,
-      # sim <- scheduleEvent(sim, time(sim) + P(sim)$.saveInterval, "CBM_dataPrep_RIAharvest1", "save")
+      # sim <- scheduleEvent(sim, time(sim) + P(sim)$.saveInterval, "CBM_dataPrep_RIAharvest2", "save")
 
       # ! ----- STOP EDITING ----- ! #
     },
@@ -595,16 +595,16 @@ Init <- function(sim) {
     ## TSA-chunks and need to be stitched back together. This function, does
     ## that per year, makes a DT of the events per disturbance,
 
-    # readin the .tar.gz file
-    harv1 <- Cache(preProcess,url = "https:/drive.google.com/file/d/1H3eAQjYZLPQzMDIdvlSC0bYfrPm1tp0A",
-                        destinationPath = "inputs",
-                        targetFile = "tif_scenario-carbon-base_20210422.tar.gz",
+    # readin the .tar.gz file https://drive.google.com/file/d/1gfEQwGQXIcmnWvwPOzyizmmAD1Yx0yEd
+    harv2 <- Cache(preProcess,url = "https://drive.google.com/file/d/1gfEQwGQXIcmnWvwPOzyizmmAD1Yx0yEd",
+                        destinationPath = "inputs/harv2",
+                        targetFile = "tif_scenario-carbon-less_20210422.tar.gz",
                         fun = "utils::untar")
 
 
       #out <- untar(targetFilePath)
       # find the 5 directories, one per tsa
-    tsaDirs <- grep("tsa", list.dirs('inputs'))
+    tsaDirs <- grep("tsa", list.dirs('inputs/harv2'))
 
 
 
@@ -615,12 +615,14 @@ Init <- function(sim) {
 
     # need to the same year in each tsaDirs
     # these are the fire and the harvest rasters for each sim year
-
-    harv1DT <- Cache(sw3Build,masterRaster = masterRaster,
+    #Cache(
+    pathsTifs <- 'inputs/harv2'
+    harv2DT <- sw3Build(masterRaster = masterRaster,
                         tsaDirs = tsaDirs,
-                        years = years)
+                        years = years,
+                        pathsTifs = pathsTifs)
 
-    sim$disturbanceRasters <- harv1DT
+    sim$disturbanceRasters <- harv2DT
     #
     # ),url = "https:/drive.google.com/file/d/1H3eAQjYZLPQzMDIdvlSC0bYfrPm1tp0A",
     #                       targetFile = "tif_scenario-carbon-base_20210422.tar.gz",
