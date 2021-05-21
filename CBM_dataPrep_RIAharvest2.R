@@ -534,7 +534,7 @@ Init <- function(sim) {
   RIArtm <- prepInputs(url = "https://drive.google.com/file/d/1h7gK44g64dwcoqhij24F2K54hs5e35Ci/view?usp=sharing",
                        destinationPath = dPath)
   # forest inventory info. this makes a raster stack of the two main rasters, gcIDRaster and ageRaster
-  RIA_VRIstack <- Cache(prepInputsVRI,VRIurl = "https://drive.google.com/file/d/1LXSX8M46EnsTCM3wGhkiMgqWcqTubC12",
+  RIA_VRIstack <- Cache(prepInputsVRI,url = "https://drive.google.com/file/d/1LXSX8M46EnsTCM3wGhkiMgqWcqTubC12",
                         dPath = dPath,
                         rasterToMatch = RIArtm
   )
@@ -556,7 +556,7 @@ Init <- function(sim) {
   #4. Make the ecozone Raster (ecoRaster)"http://sis.agr.gc.ca/cansis/nsdb/ecostrat/zone/ecozone_shp.zip"
   ecozone <- Cache(prepInputsEcozones, url = "http://sis.agr.gc.ca/cansis/nsdb/ecostrat/zone/ecozone_shp.zip",
                    dPath = dPath,
-                   masterRaster = masterRaster)
+                   rasterToMatch = masterRaster)
 
   #5. Get just BC
   #provs <- getData("GADM", country = "CAN", level = 1)
@@ -617,7 +617,7 @@ Init <- function(sim) {
     # these are the fire and the harvest rasters for each sim year
     #Cache(
     pathsTifs <- 'inputs/harv2'
-    harv2DT <- sw3Build(masterRaster = masterRaster,
+    harv2DT <- ws3Build(masterRaster = masterRaster,
                         tsaDirs = tsaDirs,
                         years = years,
                         pathsTifs = pathsTifs)
@@ -628,7 +628,7 @@ Init <- function(sim) {
     #                       targetFile = "tif_scenario-carbon-base_20210422.tar.gz",
     #                       destinationPath = "inputs",
     #                       rasterToMatch = masterRaster,
-    #                       fun = quote(sw3Build(masterRaster = masterRaster)),
+    #                       fun = quote(ws3Build(masterRaster = masterRaster)),
     #                       overwrite = TRUE
     #                       )
 
