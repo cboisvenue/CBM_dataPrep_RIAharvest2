@@ -595,10 +595,13 @@ Init <- function(sim) {
     ## TSA-chunks and need to be stitched back together. This function, does
     ## that per year, makes a DT of the events per disturbance,
 
-    # readin the .tar.gz file https://drive.google.com/file/d/1gfEQwGQXIcmnWvwPOzyizmmAD1Yx0yEd
-    harv2 <- Cache(preProcess,url = "https://drive.google.com/file/d/1gfEQwGQXIcmnWvwPOzyizmmAD1Yx0yEd",
+    # readin the .tar.gz file
+    # https://drive.google.com/file/d/1PiDpeYGZJfKUPvMGlWvXkEfuThX-lD5r (updated
+    # June 23, 2021)
+
+    harv2 <- Cache(preProcess,url = "https://drive.google.com/file/d/1PiDpeYGZJfKUPvMGlWvXkEfuThX-lD5r",
                         destinationPath = "inputs/harv2",
-                        targetFile = "tif_scenario-carbon-less_20210422.tar.gz",
+                        targetFile = "tif_scenrio-carbon-less_20210622.tar.gz",
                         fun = "utils::untar")
 
 
@@ -617,7 +620,7 @@ Init <- function(sim) {
     # these are the fire and the harvest rasters for each sim year
     #Cache(
     pathsTifs <- 'inputs/harv2'
-    harv2DT <- ws3Build(masterRaster = masterRaster,
+    harv2DT <- Cache(ws3Build, masterRaster = masterRaster,
                         tsaDirs = tsaDirs,
                         years = years,
                         pathsTifs = pathsTifs)
