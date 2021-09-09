@@ -281,24 +281,25 @@ Init <- function(sim) {
   sim$level3DT <- level3DT
   ## End data.table for simulations-------------------------------------------
 
-
   ## TODO: problem with ages<=1
   ##################################################### # SK example: can't seem
-  #to solve why growth curve id 52 (white birch, good # productivity) will not
-  #run with ages= c(0,1,2) it gets stuck in the spinup. Tried ages==1, # and
-  #ages==2. Maybe because the first few years of growth are 0 ? (to check) it #
-  #does not grow and it does not fill-up the soil pools. # Notes: the GAMs are
-  #fit on the cumulative curves of carbon/ha for three # pools. This is to make
-  #sure the curves go through 0...but maybe it would # work better for GAMs to
-  #be fit on the increments (?). # since all growth curves are for merchantible
-  #timber (with diameter limits), it is acceptable to start all increments at
-  #the level of year==3.
+  # in SK: to solve why growth curve id 52 (white birch, good # productivity) will not
+  #run with ages= c(0,1,2) it gets stuck in the spinup need to set ages to 3. Tried ages==1, and
+  #ages==2. Maybe because the first few years of growth are 0 ? (to check) it
+  #does not grow and it does not fill-up the soil pools.
   #work for this problem for most curves for now: this is from SK runs
   #sim$level3DT[ages==0 & growth_curve_component_id==52,ages:=3]
- ######################################
-  ##################### temp fix should
-
   #sim$level3DT[ages <= 1, ages := 3]
+  # in RIA: won't run for ages 0 or 1 with growth 0
+  ######################################
+  ## TOOLS TO DEBUG C++ Spinup() fnct
+  #level3DT <- level3DT[ages>0,]
+
+  sim$realAges <- sim$level3DT[, ages]
+  sim$level3DT[ages <= 1, ages := 2]
+  #sim$gcids <- sim$level3DT$gcids
+
+  setorderv(sim$level3DT, "pixelGroup")
 
   setorderv(sim$level3DT, "pixelGroup")
 
