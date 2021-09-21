@@ -393,7 +393,7 @@ Init <- function(sim) {
                 # mySpuDmids <- data.table(mySpuDmids, dmid$disturbance_matrix_id)
                 # names(mySpuDmids) <- c("distName", "rasterId", "spatial_unit_id", "wholeStand", "disturbance_matrix_id")
                 # sim$mySpuDmids <- mySpuDmids
-  # sim$mySpuDmids <- sim$userDist
+   sim$mySpuDmids <- sim$userDist
 
   # need to match the historic and last past dist to the spatial unit
   # DECISION: both the last pass and the historic disturbance will be the same
